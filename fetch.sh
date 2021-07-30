@@ -45,7 +45,26 @@ done
 
 # Remove files that are not useful as part of the SDK.
 rm -rf root/usr/share/man
-rm -rf root/usr/share/doc
 rm -rf root/usr/lib/x86_64-linux-gnu/pkgconfig
 rm -rf root/usr/share/bug
 rm -rf root/usr/share/pkgconfig
+find root/usr/share/doc -type f -not -name 'copyright' | xargs rm -rf --
+find root/usr/share/doc | grep changelog.Debian.gz | xargs rm --
+
+# Eliminate symlinks, which are difficult to use on Windows.
+pushd root/usr/lib/x86_64-linux-gnu
+
+# We statically link as much as possible; so we don't need these dynamic libs.
+rm libX11.so \
+    libXi.so \
+    libXcursor.so \
+    libXrandr.so \
+    libXdmcp.so \
+    libXext.so \
+    libXrender.so \
+    libXau.so \
+    libXinerama.so \
+    libXfixes.so \
+    libxcb.so
+
+rm libVk*.so
