@@ -42,3 +42,10 @@ do
 
     rm -rf *.tar.xz *.tar.gz debian-binary
 done
+
+# Remove files that are not useful as part of the SDK.
+rm -rf root/usr/share/man
+rm -rf root/usr/share/doc
+rm -rf root/usr/lib/x86_64-linux-gnu/pkgconfig
+rm -rf root/usr/share/bug
+rm -rf root/usr/share/pkgconfig
