@@ -7,7 +7,10 @@ rm -rf root/
 mkdir -p root/
 
 declare -a packages=(
+    "$mirror/ubuntu/pool/main/libx/libx11/libx11-6_1.6.4-3ubuntu0.4_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libx11/libx11-dev_1.6.4-3ubuntu0.4_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxcb/libxcb1_1.13-1_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxcb/libxcb1-dev_1.13-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxcursor/libxcursor-dev_1.1.15-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxrandr/libxrandr-dev_1.5.1-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxinerama/libxinerama-dev_1.1.3-1_amd64.deb"
@@ -19,7 +22,6 @@ declare -a packages=(
     "$mirror/ubuntu/pool/main/libx/libxrender/libxrender-dev_0.9.10-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxext/libxext-dev_1.3.3-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxfixes/libxfixes-dev_5.0.3-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxcb/libxcb1-dev_1.13-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxau/libxau-dev_1.0.8-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxdmcp/libxdmcp-dev_1.1.2-3_amd64.deb"
 )
@@ -48,15 +50,23 @@ rm -rf root/usr/share/man
 rm -rf root/usr/lib/x86_64-linux-gnu/pkgconfig
 rm -rf root/usr/share/bug
 rm -rf root/usr/share/pkgconfig
+rm -rf root/usr/share/lintian
 find root/usr/share/doc -type f -not -name 'copyright' | xargs rm -rf --
 find root/usr/share/doc | grep changelog.Debian.gz | xargs rm --
 
 # Eliminate symlinks, which are difficult to use on Windows.
 pushd root/usr/lib/x86_64-linux-gnu
 
+rm libX11.so libX11.so.6
+mv libX11.so.6.3.0 libX11.so
+rm libX11.a # libX11 is dynamically linked.
+
+rm libxcb.so libxcb.so.1
+mv libxcb.so.1.1.0 libxcb.so
+rm libxcb.a # libxcb is dynamically linked.
+
 # We statically link as much as possible; so we don't need these dynamic libs.
-rm libX11.so \
-    libXi.so \
+rm libXi.so \
     libXcursor.so \
     libXrandr.so \
     libXdmcp.so \
@@ -65,6 +75,5 @@ rm libX11.so \
     libXau.so \
     libXinerama.so \
     libXfixes.so \
-    libxcb.so
 
 rm libVk*.so
