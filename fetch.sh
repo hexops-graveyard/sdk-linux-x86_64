@@ -9,6 +9,7 @@ mkdir -p root/
 declare -a packages=(
     "$mirror/ubuntu/pool/main/libx/libx11/libx11-6_1.6.4-3ubuntu0.4_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libx11/libx11-dev_1.6.4-3ubuntu0.4_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libx11/libx11-xcb-dev_1.6.4-3ubuntu0.4_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxcb/libxcb1_1.13-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxcb/libxcb1-dev_1.13-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxcursor/libxcursor-dev_1.1.15-1_amd64.deb"
