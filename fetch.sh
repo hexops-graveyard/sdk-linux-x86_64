@@ -76,5 +76,8 @@ rm libXi.so \
     libXau.so \
     libXinerama.so \
     libXfixes.so \
+    libvulkan.so \
+    libX11-xcb.so
 
 rm libVk*.so
+
