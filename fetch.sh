@@ -25,6 +25,8 @@ declare -a packages=(
     "$mirror/ubuntu/pool/main/libx/libxfixes/libxfixes-dev_5.0.3-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxau/libxau-dev_1.0.8-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxdmcp/libxdmcp-dev_1.1.2-3_amd64.deb"
+    "$mirror/ubuntu/pool/main/w/wayland/libwayland-dev_1.16.0-1ubuntu1.1~18.04.3_amd64.deb"
+    "$mirror/ubuntu/pool/main/w/wayland-protocols/wayland-protocols_1.13-1_all.deb"
 )
 
 mkdir -p deb/
@@ -50,6 +52,7 @@ done
 rm -rf root/usr/share/man
 rm -rf root/usr/lib/x86_64-linux-gnu/pkgconfig
 rm -rf root/usr/share/bug
+rm -rf root/usr/share/wayland
 rm -rf root/usr/share/pkgconfig
 rm -rf root/usr/share/lintian
 find root/usr/share/doc -type f -not -name 'copyright' | xargs rm -rf --
@@ -81,3 +84,4 @@ rm libXi.so \
 
 rm libVk*.so
 
+rm libwayland*.so
