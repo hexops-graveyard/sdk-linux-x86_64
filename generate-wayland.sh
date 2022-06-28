@@ -13,9 +13,10 @@ generate() {
   protocol_path=$1
   output_name=$2
 
-  rm -f "$gen_dir"/wayland-"$output_name"-client-protocol.{h,c}
+  rm -f "$gen_dir"/wayland-"$output_name"-client-protocol-code.h
+  rm -f "$gen_dir"/wayland-"$output_name"-client-protocol.h
 
-  wayland-scanner private-code wayland-protocols/"$protocol_path".xml "$gen_dir"/wayland-"$output_name"-client-protocol.c
+  wayland-scanner private-code wayland-protocols/"$protocol_path".xml "$gen_dir"/wayland-"$output_name"-client-protocol-code.h
   wayland-scanner client-header wayland-protocols/"$protocol_path".xml "$gen_dir"/wayland-"$output_name"-client-protocol.h
 }
 
@@ -26,5 +27,12 @@ generate "unstable/pointer-constraints/pointer-constraints-unstable-v1" "pointer
 generate "unstable/relative-pointer/relative-pointer-unstable-v1" "relative-pointer-unstable-v1"
 generate "unstable/idle-inhibit/idle-inhibit-unstable-v1" "idle-inhibit-unstable-v1"
 
+wget https://gitlab.freedesktop.org/wayland/wayland/-/raw/master/protocol/wayland.xml
+rm -f "$gen_dir"/wayland-client-protocol-code.h
+rm -f "$gen_dir"/wayland-client-protocol.h
+wayland-scanner private-code wayland.xml "$gen_dir"/wayland-client-protocol-code.h
+wayland-scanner client-header wayland.xml "$gen_dir"/wayland-client-protocol.h
+
 # Cleanup XML files we no longer need.
 rm -rf wayland-protocols
+rm -f wayland.xml
