@@ -1,11 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: Vulkan-LoaderAndValidationLayers
-Source: https://github.com/KhronosGroup/Vulkan-LoaderAndValidationLayers
-Files-Excluded: 
- build-android
- demos/smoke/android/gradle/wrapper/gradle-wrapper.jar
- tests/gtest-*
- windowsRuntimeInstaller
+Upstream-Name: Vulkan-Loader
+Source: https://github.com/KhronosGroup/Vulkan-Loader
 
 Files: *
 Copyright: 2015-2016 Valve Corporation
@@ -39,10 +34,6 @@ License: MIT
 Files: debian/*
 Copyright: 2016 Timo Aaltonen <tjaalton@debian.org>
 License: MIT or Apache-2.0
-
-Files: debian/patches/install-vulkan-intel-header.diff
-Copyright: 2015 Intel Corporation
-License: MIT
 
 License: MIT
  Permission is hereby granted, free of charge, to any person obtaining a
