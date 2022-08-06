@@ -17,7 +17,7 @@ declare -a packages=(
     "$mirror/ubuntu/pool/main/libx/libxinerama/libxinerama-dev_1.1.3-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxi/libxi-dev_1.7.9-1_amd64.deb"
     "$mirror/ubuntu/pool/main/m/mesa/mesa-common-dev_19.2.8-0ubuntu0~18.04.2_amd64.deb"
-    "$mirror/ubuntu/pool/main/v/vulkan-loader/libvulkan-dev_1.2.131.2-1_amd64.deb"
+    "$mirror/ubuntu/pool/main/v/vulkan-loader/libvulkan-dev_1.3.204.1-2_amd64.deb"
     "$mirror/ubuntu/pool/main/x/xorgproto/x11proto-dev_2018.4-4_all.deb"
     "$mirror/ubuntu/pool/main/libx/libxrender/libxrender-dev_0.9.10-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxext/libxext-dev_1.3.3-1_amd64.deb"
@@ -38,13 +38,15 @@ do
     fi
     ar vx "$deb"
 
-    if [ -f ./data.tar.xz ]; then
+    if [ -f ./data.tar.zst ]; then
+        tar -xvf data.tar.zst -C root/
+    elif [ -f ./data.tar.xz ]; then
         tar -xvf data.tar.xz -C root/
     else
         tar -xvf data.tar.gz -C root/
     fi
 
-    rm -rf *.tar.xz *.tar.gz debian-binary
+    rm -rf *.tar* debian-binary
 done
 
 # Remove files that are not useful as part of the SDK.
