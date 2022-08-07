@@ -17,7 +17,6 @@ declare -a packages=(
     "$mirror/ubuntu/pool/main/libx/libxinerama/libxinerama-dev_1.1.3-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxi/libxi-dev_1.7.9-1_amd64.deb"
     "$mirror/ubuntu/pool/main/m/mesa/mesa-common-dev_19.2.8-0ubuntu0~18.04.2_amd64.deb"
-    "$mirror/ubuntu/pool/main/v/vulkan-loader/libvulkan-dev_1.3.204.1-2_amd64.deb"
     "$mirror/ubuntu/pool/main/x/xorgproto/x11proto-dev_2018.4-4_all.deb"
     "$mirror/ubuntu/pool/main/libx/libxrender/libxrender-dev_0.9.10-1_amd64.deb"
     "$mirror/ubuntu/pool/main/libx/libxext/libxext-dev_1.3.3-1_amd64.deb"
@@ -56,7 +55,6 @@ rm -rf root/usr/share/bug
 rm -rf root/usr/share/wayland
 rm -rf root/usr/share/pkgconfig
 rm -rf root/usr/share/lintian
-rm -rf root/usr/share/vulkan/registry/
 find root/usr/share/doc -type f -not -name 'copyright' | xargs rm -rf --
 find root/usr/share/doc | grep changelog.Debian.gz | xargs rm --
 
@@ -81,10 +79,19 @@ rm libXi.so \
     libXau.so \
     libXinerama.so \
     libXfixes.so \
-    libvulkan.so \
     libX11-xcb.so
 
 rm libwayland*.so
 
 # libxkbcommon is resolved at runtime by GLFW, so we only need headers.
 rm libxkbcommon*
+
+popd
+
+# Vulkan headers
+git clone -b v1.3.224 --depth 1 https://github.com/KhronosGroup/Vulkan-Headers
+cp -R ./Vulkan-Headers/include/vulkan root/usr/include/vulkan
+cp -R ./Vulkan-Headers/include/vk_video root/usr/include/vk_video
+mkdir -p root/usr/share/doc/libvulkan-dev/
+cp ./Vulkan-Headers/LICENSE.txt root/usr/share/doc/libvulkan-dev/
+rm -rf Vulkan-Headers/
