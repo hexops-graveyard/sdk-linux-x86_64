@@ -1,29 +1,27 @@
 #!/usr/bin/env bash
 set -ex
 
-mirror='http://mirrors.kernel.org'
+mirror='https://ftp.halifax.rwth-aachen.de'
 
 rm -rf root/
 mkdir -p root/
 
 declare -a packages=(
-    "$mirror/ubuntu/pool/main/libx/libx11/libx11-6_1.6.4-3ubuntu0.4_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libx11/libx11-dev_1.6.4-3ubuntu0.4_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libx11/libx11-xcb-dev_1.6.4-3ubuntu0.4_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxcb/libxcb1_1.13-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxcb/libxcb1-dev_1.13-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxcursor/libxcursor-dev_1.1.15-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxrandr/libxrandr-dev_1.5.1-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxinerama/libxinerama-dev_1.1.3-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxi/libxi-dev_1.7.9-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/m/mesa/mesa-common-dev_19.2.8-0ubuntu0~18.04.2_amd64.deb"
-    "$mirror/ubuntu/pool/main/x/xorgproto/x11proto-dev_2018.4-4_all.deb"
-    "$mirror/ubuntu/pool/main/libx/libxrender/libxrender-dev_0.9.10-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxext/libxext-dev_1.3.3-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxfixes/libxfixes-dev_5.0.3-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxau/libxau-dev_1.0.8-1_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxdmcp/libxdmcp-dev_1.1.2-3_amd64.deb"
-    "$mirror/ubuntu/pool/main/libx/libxkbcommon/libxkbcommon-dev_0.8.0-1ubuntu0.1_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxkbcommon/libxkbcommon-dev_0.10.0-1_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libx11/libx11-6_1.6.9-2ubuntu1.3_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libx11/libx11-dev_1.7.5-1_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libx11/libx11-xcb-dev_1.6.9-2ubuntu1.3_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxcb/libxcb1_1.14-2_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxcb/libxcb1-dev_1.14-2_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxcursor/libxcursor-dev_1.2.0-2_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxrandr/libxrandr-dev_1.5.2-0ubuntu1_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxrender/libxrender-dev_0.9.10-1.1_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxinerama/libxinerama-dev_1.1.4-2_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxi/libxi-dev_1.7.10-0ubuntu1_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxext/libxext-dev_1.3.4-0ubuntu1_amd64.deb"
+    "$mirror/ubuntu/pool/main/libx/libxfixes/libxfixes-dev_5.0.3-2_amd64.deb"
+    "$mirror/ubuntu/pool/main/x/xorgproto/x11proto-dev_2019.2-1ubuntu1_all.deb"
+    "$mirror/ubuntu/pool/main/m/mesa/mesa-common-dev_20.0.8-0ubuntu1~18.04.1_amd64.deb"
     "$mirror/ubuntu/pool/main/w/wayland/libwayland-dev_1.16.0-1ubuntu1.1~18.04.3_amd64.deb"
 )
 
@@ -61,30 +59,22 @@ find root/usr/share/doc | grep changelog.Debian.gz | xargs rm --
 # Eliminate symlinks, which are difficult to use on Windows.
 pushd root/usr/lib/x86_64-linux-gnu
 
-rm libX11.so libX11.so.6
+# Most of these libs are resolved at runtime by GLFW, so we only need headers.
+rm  libX11.so libX11.so.6 libX11.a \
+    libxcb.so libxcb.so.1 libxcb.a \
+    libX11-xcb.so libX11-xcb.a \
+    libXcursor.so libXcursor.a \
+    libXext.so libXext.a \
+    libXfixes.so libXfixes.a \
+    libXi.so libXi.a \
+    libXinerama.so libXinerama.a \
+    libXrandr.so libXrandr.a \
+    libXrender.so libXrender.a \
+    libxkbcommon* \
+    libwayland*
+
 mv libX11.so.6.3.0 libX11.so
-rm libX11.a # libX11 is dynamically linked.
-
-rm libxcb.so libxcb.so.1
 mv libxcb.so.1.1.0 libxcb.so
-rm libxcb.a # libxcb is dynamically linked.
-
-# We statically link as much as possible; so we don't need these dynamic libs.
-rm libXi.so \
-    libXcursor.so \
-    libXrandr.so \
-    libXdmcp.so \
-    libXext.so \
-    libXrender.so \
-    libXau.so \
-    libXinerama.so \
-    libXfixes.so \
-    libX11-xcb.so
-
-rm libwayland*.so
-
-# libxkbcommon is resolved at runtime by GLFW, so we only need headers.
-rm libxkbcommon*
 
 popd
 
