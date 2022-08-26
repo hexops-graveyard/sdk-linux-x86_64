@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -ex
 
-git clone --depth 1 --branch 1.24 https://github.com/wayland-project/wayland-protocols
+if [ -d "wayland-protocols" ] ; then
+  rm -rf wayland-protocols
+fi
+git clone --depth 1 --branch 1.26 https://github.com/wayland-project/wayland-protocols
 
 # Generates Wayland client protocol sources needed for e.g. GLFW
 # https://github.com/glfw/glfw/blob/6281f498c875f49d8ac5c5a02d968fb1792fd9f5/src/CMakeLists.txt#L98-L118
@@ -27,7 +30,7 @@ generate "unstable/pointer-constraints/pointer-constraints-unstable-v1" "pointer
 generate "unstable/relative-pointer/relative-pointer-unstable-v1" "relative-pointer-unstable-v1"
 generate "unstable/idle-inhibit/idle-inhibit-unstable-v1" "idle-inhibit-unstable-v1"
 
-wget https://gitlab.freedesktop.org/wayland/wayland/-/raw/master/protocol/wayland.xml
+curl -LO https://gitlab.freedesktop.org/wayland/wayland/-/raw/master/protocol/wayland.xml
 rm -f "$gen_dir"/wayland-client-protocol-code.h
 rm -f "$gen_dir"/wayland-client-protocol.h
 wayland-scanner private-code wayland.xml "$gen_dir"/wayland-client-protocol-code.h
