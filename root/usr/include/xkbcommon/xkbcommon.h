@@ -177,7 +177,7 @@ typedef uint32_t xkb_keycode_t;
  * somewhat more general, in that they can also represent some "function",
  * such as "Left" or "Right" for the arrow keys.  For more information,
  * see:
- * http://www.x.org/releases/X11R7.7/doc/xproto/x11protocol.html#keysym_encoding
+ * https://www.x.org/releases/current/doc/xproto/x11protocol.html#keysym_encoding
  *
  * Specifically named keysyms can be found in the
  * xkbcommon/xkbcommon-keysyms.h header file.  Their name does not include
@@ -385,7 +385,7 @@ struct xkb_rule_names {
  *   Similarly, the UTF-8/UTF-32 string produced is capitalized.
  *
  *   This is described in:
- *   http://www.x.org/releases/current/doc/kbproto/xkbproto.html#Interpreting_the_Lock_Modifier
+ *   https://www.x.org/releases/current/doc/kbproto/xkbproto.html#Interpreting_the_Lock_Modifier
  *
  * - Control transformation.  If the Control modifier is active and
  *   was not consumed by the translation process, the string produced
@@ -393,7 +393,7 @@ struct xkb_rule_names {
  *   applicable).  Keysyms are not affected.
  *
  *   This is described in:
- *   http://www.x.org/releases/current/doc/kbproto/xkbproto.html#Interpreting_the_Control_Modifier
+ *   https://www.x.org/releases/current/doc/kbproto/xkbproto.html#Interpreting_the_Control_Modifier
  *
  * Each relevant function discusses which transformations it performs.
  *
@@ -530,7 +530,7 @@ xkb_keysym_to_lower(xkb_keysym_t ks);
  *
  * The user may set some environment variables which affect the library:
  *
- * - `XKB_CONFIG_ROOT`, `HOME` - see @ref include-path.
+ * - `XKB_CONFIG_ROOT`, `XDG_CONFIG_DIR`, `HOME` - see @ref include-path.
  * - `XKB_LOG_LEVEL` - see xkb_context_set_log_level().
  * - `XKB_LOG_VERBOSITY` - see xkb_context_set_log_verbosity().
  * - `XKB_DEFAULT_RULES`, `XKB_DEFAULT_MODEL`, `XKB_DEFAULT_LAYOUT`,
@@ -616,11 +616,13 @@ xkb_context_get_user_data(struct xkb_context *context);
  * The include paths are the file-system paths that are searched when an
  * include statement is encountered during keymap compilation.
  *
- * The default include paths are:
- * - The system XKB root, defined at library configuration time.
- *   If * the `XKB_CONFIG_ROOT` environment is defined, it is used instead.
+ * The default include paths are, in that lookup order:
+ * - The path `$XDG_CONFIG_HOME/xkb`, with the usual `XDG_CONFIG_HOME`
+ *   fallback to `$HOME/.config/` if unset.
  * - The path `$HOME/.xkb`, where $HOME is the value of the environment
  *   variable `HOME`.
+ * - The `XKB_CONFIG_ROOT` environment variable, if defined, otherwise
+ *   the system XKB root, defined at library configuration time.
  *
  * @{
  */
@@ -1271,7 +1273,7 @@ enum xkb_state_component {
     XKB_STATE_MODS_LOCKED = (1 << 2),
     /** Effective modifiers, i.e. currently active and affect key
      *  processing (derived from the other state components).
-     *  Use this unless you explictly care how the state came about. */
+     *  Use this unless you explicitly care how the state came about. */
     XKB_STATE_MODS_EFFECTIVE = (1 << 3),
     /** Depressed layout, i.e. a key is physically holding it. */
     XKB_STATE_LAYOUT_DEPRESSED = (1 << 4),
@@ -1283,7 +1285,7 @@ enum xkb_state_component {
     XKB_STATE_LAYOUT_LOCKED = (1 << 6),
     /** Effective layout, i.e. currently active and affects key processing
      *  (derived from the other state components).
-     *  Use this unless you explictly care how the state came about. */
+     *  Use this unless you explicitly care how the state came about. */
     XKB_STATE_LAYOUT_EFFECTIVE = (1 << 7),
     /** LEDs (derived from the other state components). */
     XKB_STATE_LEDS = (1 << 8)
@@ -1294,10 +1296,10 @@ enum xkb_state_component {
  * released.
  *
  * This entry point is intended for programs which track the keyboard state
- * explictly (like an evdev client).  If the state is serialized to you by
+ * explicitly (like an evdev client).  If the state is serialized to you by
  * a master process (like a Wayland compositor) using functions like
  * xkb_state_serialize_mods(), you should use xkb_state_update_mask() instead.
- * The two functins should not generally be used together.
+ * The two functions should not generally be used together.
  *
  * A series of calls to this function should be consistent; that is, a call
  * with XKB_KEY_DOWN for a key should be matched by an XKB_KEY_UP; if a key
@@ -1703,7 +1705,7 @@ enum xkb_consumed_mode {
     /**
      * This is the mode defined in the XKB specification and used by libX11.
      *
-     * A modifier is consumed iff it *may affect* key translation.
+     * A modifier is consumed if and only if it *may affect* key translation.
      *
      * For example, if `Control+Alt+<Backspace>` produces some assigned keysym,
      * then when pressing just `<Backspace>`, `Control` and `Alt` are consumed,
@@ -1714,16 +1716,17 @@ enum xkb_consumed_mode {
     /**
      * This is the mode used by the GTK+ toolkit.
      *
-     * The mode consists of the following two heuristics:
+     * The mode consists of the following two independent heuristics:
      *
-     * - The active set of modifiers, excluding modifiers which do not affect
-     *   the key (as described above), are considered consumed, if they result
-     *   in different keysyms being produced than when no modifiers are active.
-     *
-     * - Additionally, a single modifier is considered consumed if, were it the
-     *   only active modifier affecting the key (as described above), it would
-     *   result in different keysyms being produced than when no modifiers are
+     * - The currently active set of modifiers, excluding modifiers which do
+     *   not affect the key (as described for @ref XKB_CONSUMED_MODE_XKB), are
+     *   considered consumed, if the keysyms produced when all of them are
+     *   active are different from the keysyms produced when no modifiers are
      *   active.
+     *
+     * - A single modifier is considered consumed if the keysyms produced for
+     *   the key when it is the only active modifier are different from the
+     *   keysyms produced when no modifiers are active.
      */
     XKB_CONSUMED_MODE_GTK
 };
