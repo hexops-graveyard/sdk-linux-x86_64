@@ -102,7 +102,7 @@ mv libjack.so.0.1.0 libjack.so
 popd
 
 # Vulkan headers
-git clone -b v1.3.224 --depth 1 https://github.com/KhronosGroup/Vulkan-Headers
+git clone -b v1.3.238 --depth 1 https://github.com/KhronosGroup/Vulkan-Headers
 cp -R ./Vulkan-Headers/include/vulkan root/usr/include/vulkan
 cp -R ./Vulkan-Headers/include/vk_video root/usr/include/vk_video
 mkdir -p root/usr/share/doc/libvulkan-dev/
