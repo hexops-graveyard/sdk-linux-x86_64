@@ -24,13 +24,9 @@ declare -a packages=(
     "$mirror/pool/main/x/xorgproto/x11proto-dev_2019.2-1ubuntu1_all.deb"
     "$mirror/pool/main/m/mesa/mesa-common-dev_20.0.8-0ubuntu1~18.04.1_amd64.deb"
     "$mirror/pool/main/w/wayland/libwayland-dev_1.16.0-1ubuntu1.1~18.04.4_amd64.deb"
-    "$mirror/pool/main/a/alsa-lib/libasound2_1.1.3-5_amd64.deb"
     "$mirror/pool/main/a/alsa-lib/libasound2-dev_1.1.3-5_amd64.deb"
-    "$mirror/pool/main/p/pulseaudio/libpulse0_16.1+dfsg1-1ubuntu3_amd64.deb"
     "$mirror/pool/main/p/pulseaudio/libpulse-dev_16.1+dfsg1-1ubuntu3_amd64.deb"
-    "$mirror/pool/main/j/jackd2/libjack-jackd2-0_1.9.21~dfsg-1_amd64.deb"
     "$mirror/pool/main/j/jackd2/libjack-jackd2-dev_1.9.21~dfsg-1_amd64.deb"
-    "$mirror/pool/main/p/pipewire/libpipewire-0.3-0_0.3.64-2_amd64.deb"
     "$mirror/pool/main/p/pipewire/libpipewire-0.3-dev_0.3.64-2_amd64.deb"
     "$mirror/pool/main/p/pipewire/libspa-0.2-dev_0.3.64-2_amd64.deb"
 )
@@ -76,7 +72,7 @@ find root/usr/share/doc | grep changelog.Debian.gz | xargs rm --
 pushd root/usr/lib/x86_64-linux-gnu
 
 # Most of these libs are resolved at runtime by GLFW, so we only need headers.
-rm  -r pulseaudio cmake
+rm  -r cmake
 rm  libX11.so libX11.so.6 libX11.a \
     libxcb.so libxcb.so.1 libxcb.a \
     libX11-xcb.so libX11-xcb.a \
@@ -88,20 +84,11 @@ rm  libX11.so libX11.so.6 libX11.a \
     libXrandr.so libXrandr.a \
     libXrender.so libXrender.a \
     libxkbcommon* \
-    libwayland* \
-    libasound.so.2 \
-    libjack.so.0 libjacknet.so.0 libjackserver.so.0 \
-    libjacknet.so libjackserver.so libjacknet.so.0.1.0 libjackserver.so.0.1.0 \
-    libpulse.so.0 libpulse-simple.so libpulse-simple.so.0 libpulse-simple.so.0.1.1 \
-    libpulse-mainloop-glib.so libpipewire-0.3.so.0 libpipewire-0.3.so
+    libwayland*
 
 
 mv libX11.so.6.3.0 libX11.so
 mv libxcb.so.1.1.0 libxcb.so
-mv libasound.so.2.0.0 libasound.so
-mv libpulse.so.0.24.2 libpulse.so
-mv libjack.so.0.1.0 libjack.so
-mv libpipewire-0.3.so.0.364.0 libpipewire-0.3.so
 
 popd
 
