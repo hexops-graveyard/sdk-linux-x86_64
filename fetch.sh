@@ -101,7 +101,7 @@ rm -rf pipewire-0.3 spa-0.2
 popd
 
 # Vulkan headers
-git clone -b v1.3.238 --depth 1 https://github.com/KhronosGroup/Vulkan-Headers
+git clone -b v1.3.240 --depth 1 https://github.com/KhronosGroup/Vulkan-Headers
 cp -R ./Vulkan-Headers/include/vulkan root/usr/include/vulkan
 cp -R ./Vulkan-Headers/include/vk_video root/usr/include/vk_video
 mkdir -p root/usr/share/doc/libvulkan-dev/
