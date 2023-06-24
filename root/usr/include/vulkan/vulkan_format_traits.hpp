@@ -1,4 +1,4 @@
-// Copyright 2015-2022 The Khronos Group Inc.
+// Copyright 2015-2023 The Khronos Group Inc.
 //
 // SPDX-License-Identifier: Apache-2.0 OR MIT
 //
@@ -1592,7 +1592,7 @@ namespace VULKAN_HPP_NAMESPACE
         {
           case 0: return 10;
           case 1: return 11;
-          case 2: return 10;
+          case 2: return 11;
           default: VULKAN_HPP_ASSERT( false ); return 0;
         }
       case VULKAN_HPP_NAMESPACE::Format::eE5B9G9R9UfloatPack32:
@@ -2328,8 +2328,8 @@ namespace VULKAN_HPP_NAMESPACE
         switch ( component )
         {
           case 0: return "B";
-          case 1: return "R";
-          case 2: return "G";
+          case 1: return "G";
+          case 2: return "R";
           case 3: return "A";
           default: VULKAN_HPP_ASSERT( false ); return "";
         }
